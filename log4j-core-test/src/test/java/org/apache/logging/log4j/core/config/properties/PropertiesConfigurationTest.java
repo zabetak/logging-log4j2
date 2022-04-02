@@ -147,4 +147,16 @@ class PropertiesConfigurationTest {
         final List<LogEvent> thirdEvents = third.getEvents();
         assertEquals(1, thirdEvents.size());
     }
+
+    @Test
+    @LoggerContextSource("log4j2-compositefilter.properties")
+    void testLoggerCompositeFilter(@Named final ListAppender L0) {
+        final Logger logger = LogManager.getLogger("CompositeFilterTestLogger");
+        logger.info("Messase with no keyword");
+        logger.info("Messase with SQL keyword");
+        logger.info("Messase with JPQL keyword");
+        logger.info("Messase with both SQL and JPQL keywords");
+        assertEquals(1, L0.getEvents().size());
+        assertEquals("Messase with both SQL and JPQL keywords", L0.getEvents().get(0).getMessage());
+    }
 }
